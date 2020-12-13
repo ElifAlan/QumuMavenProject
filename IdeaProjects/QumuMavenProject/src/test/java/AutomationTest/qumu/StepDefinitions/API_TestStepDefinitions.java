@@ -1,5 +1,6 @@
 package AutomationTest.qumu.StepDefinitions;
 
+import AutomationTest.qumu.Utilities.Login;
 import AutomationTest.qumu.Utilities.TestBase;
 import AutomationTest.qumu.Utilities.TestDataReader;
 import AutomationTest.qumu.Utilities.Users;
@@ -19,14 +20,28 @@ import java.util.Map;
 import static org.testng.Assert.*;
 
 public class API_TestStepDefinitions {
-    Response response;
 
+    Response response;
+    int page;
+    JsonPath path;
+    List<Map<String,Object>> data;
+    int userCount;
+    int lastUserId;
 
     //BUNA TEKRAR BAK!!
     @Given("I get the default list of users for on {int}st page")
     public void i_get_the_default_list_of_users_for_on_st_page (Integer pageNumber)  {
+        baseURI="https://reqres.in/api/users";
+        response = given().accept(ContentType.JSON).queryParams("page",page).when().get();
+        path = response.jsonPath();
+        data = path.getList("data");
+        data.forEach(x-> System.out.println(x));
 
-        response = given().accept(ContentType.JSON)
+
+
+
+
+      /*  response = given().accept(ContentType.JSON)
                 .queryParam("page",pageNumber)
                 .when().get(TestDataReader.get("api_url")+"api/users");
         assertEquals(response.statusCode(),200);
@@ -37,33 +52,66 @@ public class API_TestStepDefinitions {
        // System.out.println(list);
 
 
-        response.prettyPrint();
+        response.prettyPrint();*/
+
+       /* JsonPath pathFirstPage = response.jsonPath();
+        Map<String, Object> data = pathFirstPage.getMap("x.data");
+      //list of all the users in the first page
+        data.forEach((k, v) -> System.out.println(k + "||" + v));
+      //for user count I create a counter
+        int userCount = data.size();
+        //for the last user`s id
+        int lastUserId=0;*/
+
+
+
+
 
     }
       // YUKARDAKI ILE AYNI SEBEPTEN BUNA DA BAK!!!!
     @When("I get the list of all users within every page")
     public void i_get_the_list_of_all_users_within_every_page() {
-       response = given().accept(ContentType.JSON)
+        page=1;
+        userCount =0;
+        lastUserId=0;
+        //to reach last page
+        for (int i = 1; i <= (int) response.path("total_pages"); i++) {
+            Response response1 = given().accept(ContentType.JSON).queryParams("page", 2).when().get();
+            path = response1.jsonPath();
+            data = path.getList("data");
+            userCount += data.size();
+            lastUserId= (int) data.get(data.size()-1).get("id");
+            //all the users
+            System.out.println(data);
+        }
+
+
+
+
+      /* response = given().accept(ContentType.JSON)
                            .queryParam("page","2")
                             .when().get(TestDataReader.get("api_url")+"api/users");
 
         assertEquals(response.statusCode(),200);
         System.out.println(response.getHeader("Content-Type"));
         assertEquals(response.contentType(),"application/json; charset=utf-8");
-        response.prettyPrint();
+       // response.prettyPrint();*/
 
     }
 
     @Then("I should see total users count equals the number of user ids")
     public void i_should_see_total_users_count_equals_the_number_of_user_ids() {
 
-        int totalUsersCount = response.path("total");
+       assertEquals(userCount,lastUserId);
+
+
+       /* int totalUsersCount = response.path("total");
         System.out.println(totalUsersCount);
 
         int numberOfUserIds= response.path("data.id[5]");
         System.out.println(numberOfUserIds);
 
-        assertEquals(totalUsersCount,numberOfUserIds);
+        assertEquals(totalUsersCount,numberOfUserIds);*/
 
 
 
@@ -159,7 +207,7 @@ public class API_TestStepDefinitions {
         users.setName("Liza");
         users.setJob("Sale");
 
-        given().accept(ContentType.JSON)
+        response=given().accept(ContentType.JSON)
                 .and().contentType(ContentType.JSON)
                 .and().body(users)
                 .when().post(TestDataReader.get("api_url")+"api/users");
@@ -172,38 +220,41 @@ public class API_TestStepDefinitions {
 
     @Given("I login unsuccessfully with the following data")
     public void i_login_unsuccessfully_with_the_following_data(io.cucumber.datatable.DataTable dataTable) {
-        // Write code here that turns the phrase above into concrete actions
-        // For automatic transformation, change DataTable to one of
-        // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-        // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-        // Double, Byte, Short, Long, BigInteger or BigDecimal.
-        //
-        // For other transformations you can register a DataTableType.
-        throw new cucumber.api.PendingException();
+        //Login login= new Login();
+       // login.setEmail("eve.holt@reqres.in");
+       //login.setPassword("  ");
+
+       Map<String,Object> login= new HashMap<>();
+        login.put("email","eve.holt@reqres.in");
+        login.put("password","cityslicka");
+
+     response= given().accept(ContentType.JSON)
+                .and().contentType(ContentType.JSON)
+                .queryParam("email","eve.holt@reqres.in")
+                .queryParam("password","cityslicka")
+                .and().body(login)
+                .when().post(TestDataReader.get("api_url")+"api/login");
+
+
     }
 
     @Then("I should get a response code of {int}")
     public void i_should_get_a_response_code_of(Integer int1) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        assertEquals(response.statusCode(),200);
+        assertEquals(response.contentType(),"application/json; charset=utf-8");
+
     }
 
     @Then("I should see the following response message:")
     public void i_should_see_the_following_response_message(io.cucumber.datatable.DataTable dataTable) {
-        // Write code here that turns the phrase above into concrete actions
-        // For automatic transformation, change DataTable to one of
-        // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-        // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-        // Double, Byte, Short, Long, BigInteger or BigDecimal.
-        //
-        // For other transformations you can register a DataTableType.
-        throw new cucumber.api.PendingException();
+
+
+
     }
 
     @Given("I wait for the user list to load")
     public void i_wait_for_the_user_list_to_load() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+
     }
 
     @Then("I should see that every user has a unique id")
@@ -213,4 +264,23 @@ public class API_TestStepDefinitions {
     }
 
 
+    @Given("I login unsuccessfully with the following data.")
+    public void iLoginUnsuccessfullyWithTheFollowingData() {
+
+        Login login= new Login();
+        login.setEmail("eve.holt@reqres.in");
+       // login.setPassword("  ");
+       response= given().accept(ContentType.JSON)
+                .and().contentType(ContentType.JSON)
+                .queryParam("email","eve.holt@reqres.in")
+              //  .queryParam("password"," ")
+                .and().body(login)
+                .when().post(TestDataReader.get("api_url")+"api/login");
+
+    }
+
+    @Then("I should get a response code of {int}.")
+    public void iShouldGetAResponseCodeOf(int arg0) {
+        assertEquals(response.statusCode(),400);
+    }
 }

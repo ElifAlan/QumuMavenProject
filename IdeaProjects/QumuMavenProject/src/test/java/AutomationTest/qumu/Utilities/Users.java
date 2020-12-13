@@ -5,10 +5,8 @@ public class Users {
     private String name;
     private String job;
 
-
     public Users() {
     }
-
 
     public Users(String name, String job) {
         super();

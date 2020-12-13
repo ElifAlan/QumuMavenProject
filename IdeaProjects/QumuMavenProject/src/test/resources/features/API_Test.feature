@@ -19,7 +19,7 @@ Feature: API test
     Given I make a search for user 55
     Then I receive error code 404 in response
 
-  @wip
+
   Scenario Outline: CREATE a user
     Given I create a user with following <Name> <Job>
     Then response should contain the following data
@@ -30,18 +30,18 @@ Feature: API test
       | Peter | Manager |
       | Liza  | Sales   |
 
-  @wip
+
   Scenario: LOGIN - SUCCESSFUL by a user
     Given I login unsuccessfully with the following data
       | Email              | Password   |
       | eve.holt@reqres.in | cityslicka |
     Then I should get a response code of 200
-
+  @wip
   Scenario: LOGIN - UNSUCCESSFUL by a user
-    Given I login unsuccessfully with the following data
+    Given I login unsuccessfully with the following data.
       | Email              | Password |
       | eve.holt@reqres.in |          |
-    Then I should get a response code of 400
+    Then I should get a response code of 400.
     And I should see the following response message:
       | "error": "Missing password" |
 
