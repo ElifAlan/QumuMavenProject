@@ -7,12 +7,13 @@ import AutomationTest.qumu.Pages.YourCartPage;
 import AutomationTest.qumu.Utilities.BrowserSetup;
 import AutomationTest.qumu.Utilities.Driver;
 import AutomationTest.qumu.Utilities.TestDataReader;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 
-public class HomePageStepDefinitions {
+public class UI_TestStepDefinitions {
 
     @Given("I am on the home page")
     public void i_am_on_the_home_page() {
@@ -74,10 +75,10 @@ public class HomePageStepDefinitions {
 
     @Given("I remove the following item:")
     public void i_remove_the_following_item(io.cucumber.datatable.DataTable dataTable) {
-      /* YourCartPage yourCartPage= new YourCartPage();
-       yourCartPage.FleeceJacketRemove.click();
+        YourCartPage yourCartPage= new YourCartPage();
+        yourCartPage.FleeceJacketRemove.click();
 
-        BrowserSetup.waitFor(3);*/
+        BrowserSetup.waitFor(3);
 
 
     }
@@ -128,4 +129,12 @@ public class HomePageStepDefinitions {
     }
 
 
+    @And("I  should see {int} items added to the shopping cart.")
+    public void iShouldSeeItemsAddedToTheShoppingCart(int arg0) {
+
+        String expectedAmountItems="3";
+        ProductsPage productsPage= new ProductsPage();
+        String actualAmountItems =productsPage.ShoppingCartContainer.getText();
+        Assert.assertEquals("verify that "+expectedAmountItems+"added",expectedAmountItems,actualAmountItems);
+    }
 }

@@ -13,3 +13,4 @@ public abstract class BasePage {
     @FindBy(xpath = "//*[@id='shopping_cart_container']/a/span")
     public WebElement ShoppingCartContainer;
 }
+//*[@id="shopping_cart_container"]/a/span

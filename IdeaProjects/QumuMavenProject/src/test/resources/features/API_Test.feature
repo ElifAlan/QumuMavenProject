@@ -1,3 +1,4 @@
+
 Feature: API test
 
 
@@ -18,7 +19,7 @@ Feature: API test
     Given I make a search for user 55
     Then I receive error code 404 in response
 
-
+  @wip
   Scenario Outline: CREATE a user
     Given I create a user with following <Name> <Job>
     Then response should contain the following data
@@ -29,7 +30,7 @@ Feature: API test
       | Peter | Manager |
       | Liza  | Sales   |
 
-
+  @wip
   Scenario: LOGIN - SUCCESSFUL by a user
     Given I login unsuccessfully with the following data
       | Email              | Password   |
