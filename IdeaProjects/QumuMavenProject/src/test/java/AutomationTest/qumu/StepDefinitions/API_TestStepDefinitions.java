@@ -1,7 +1,6 @@
 package AutomationTest.qumu.StepDefinitions;
 
 import AutomationTest.qumu.Utilities.Login;
-import AutomationTest.qumu.Utilities.TestBase;
 import AutomationTest.qumu.Utilities.TestDataReader;
 import AutomationTest.qumu.Utilities.Users;
 import io.cucumber.java.en.Given;
@@ -11,7 +10,6 @@ import  static io.restassured.RestAssured.*;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import org.openqa.selenium.json.Json;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +17,7 @@ import java.util.Map;
 
 import static org.testng.Assert.*;
 
-public class API_TestStepDefinitions {
+public class API_TestStepDefinitions  {
 
     Response response;
     int page;
@@ -28,47 +26,21 @@ public class API_TestStepDefinitions {
     int userCount;
     int lastUserId;
 
-    //BUNA TEKRAR BAK!!
+
     @Given("I get the default list of users for on {int}st page")
     public void i_get_the_default_list_of_users_for_on_st_page (Integer pageNumber)  {
+
         baseURI="https://reqres.in/api/users";
-        response = given().accept(ContentType.JSON).queryParams("page",page).when().get();
+        response = given().accept(ContentType.JSON)
+                   .queryParams("page",page)
+                   .when().get();
         path = response.jsonPath();
         data = path.getList("data");
         data.forEach(x-> System.out.println(x));
 
 
-
-
-
-      /*  response = given().accept(ContentType.JSON)
-                .queryParam("page",pageNumber)
-                .when().get(TestDataReader.get("api_url")+"api/users");
-        assertEquals(response.statusCode(),200);
-        System.out.println(response.getHeader("Content-Type"));
-        assertEquals(response.contentType(),"application/json; charset=utf-8");
-
-       // Map<String,Object> list = response.body().as(Map.class);
-       // System.out.println(list);
-
-
-        response.prettyPrint();*/
-
-       /* JsonPath pathFirstPage = response.jsonPath();
-        Map<String, Object> data = pathFirstPage.getMap("x.data");
-      //list of all the users in the first page
-        data.forEach((k, v) -> System.out.println(k + "||" + v));
-      //for user count I create a counter
-        int userCount = data.size();
-        //for the last user`s id
-        int lastUserId=0;*/
-
-
-
-
-
     }
-      // YUKARDAKI ILE AYNI SEBEPTEN BUNA DA BAK!!!!
+
     @When("I get the list of all users within every page")
     public void i_get_the_list_of_all_users_within_every_page() {
         page=1;
@@ -76,7 +48,10 @@ public class API_TestStepDefinitions {
         lastUserId=0;
         //to reach last page
         for (int i = 1; i <= (int) response.path("total_pages"); i++) {
-            Response response1 = given().accept(ContentType.JSON).queryParams("page", 2).when().get();
+
+            Response response1 = given().accept(ContentType.JSON)
+                                        .queryParams("page", 2)
+                                        .when().get();
             path = response1.jsonPath();
             data = path.getList("data");
             userCount += data.size();
@@ -85,35 +60,13 @@ public class API_TestStepDefinitions {
             System.out.println(data);
         }
 
-
-
-
-      /* response = given().accept(ContentType.JSON)
-                           .queryParam("page","2")
-                            .when().get(TestDataReader.get("api_url")+"api/users");
-
-        assertEquals(response.statusCode(),200);
-        System.out.println(response.getHeader("Content-Type"));
-        assertEquals(response.contentType(),"application/json; charset=utf-8");
-       // response.prettyPrint();*/
-
     }
 
     @Then("I should see total users count equals the number of user ids")
     public void i_should_see_total_users_count_equals_the_number_of_user_ids() {
-
+        System.out.println(userCount);
+        System.out.println(lastUserId);
        assertEquals(userCount,lastUserId);
-
-
-       /* int totalUsersCount = response.path("total");
-        System.out.println(totalUsersCount);
-
-        int numberOfUserIds= response.path("data.id[5]");
-        System.out.println(numberOfUserIds);
-
-        assertEquals(totalUsersCount,numberOfUserIds);*/
-
-
 
     }
 
@@ -122,13 +75,6 @@ public class API_TestStepDefinitions {
         response=given().accept(ContentType.JSON)
                 .and().pathParam("id",idNumber)
                 .when().get(TestDataReader.get("api_url")+"api/users/{id}");
-        //Assertion burada yapilinca paska stepte hata veriyor
-
-      /*  assertEquals(response.statusCode(),200);
-        assertEquals(response.contentType(),"application/json; charset=utf-8");
-        //response.prettyPrint();
-        //int id = response.path("data.id");
-        //System.out.println(id);*/
 
     }
 
@@ -136,30 +82,28 @@ public class API_TestStepDefinitions {
     public void i_should_see_the_following_user_data(io.cucumber.datatable.DataTable dataTable) {
         assertEquals(response.statusCode(),200);
         assertEquals(response.contentType(),"application/json; charset=utf-8");
-        //response.prettyPrint();
-        //int id = response.path("data.id");
-        //System.out.println(id);
+        response.prettyPrint();
+        int id = response.path("data.id");
+        System.out.println(id);
 
         String firstName= response.path("data.first_name");
         String email= response.path("data.email");
-        //System.out.println(firstName);
-        //System.out.println(email);
+        System.out.println(firstName);
+        System.out.println(email);
 
         assertEquals(firstName,"Emma");
         assertEquals(email,"emma.wong@reqres.in");
-
-
     }
 
 
-   /* @Given("I make a search for user {int}.")
+    @Given("I make a search for user {int}.")
     public void iMakeASearchForUser(int idNumber) {
        response=given().accept(ContentType.JSON)
                 .and().pathParam("id",idNumber)
-                .when().get(TestDataReader.get("api_url")+"api/users/{id}");
+                .when().get(baseURI+"api/users/{id}");
 
 
-    }*/
+    }
 
     @Then("I receive error code {int} in response")
     public void i_receive_error_code_in_response(Integer code) {
@@ -183,7 +127,7 @@ public class API_TestStepDefinitions {
         assertEquals(response.contentType(),"application/json; charset=utf-8");
 
     }
-      // Buna da bak!!!!
+
     @Then("response should contain the following data")
     public void response_should_contain_the_following_data(io.cucumber.datatable.DataTable dataTable) {
         Users users1 = new Users();
@@ -220,9 +164,7 @@ public class API_TestStepDefinitions {
 
     @Given("I login unsuccessfully with the following data")
     public void i_login_unsuccessfully_with_the_following_data(io.cucumber.datatable.DataTable dataTable) {
-        //Login login= new Login();
-       // login.setEmail("eve.holt@reqres.in");
-       //login.setPassword("  ");
+
 
        Map<String,Object> login= new HashMap<>();
         login.put("email","eve.holt@reqres.in");
@@ -248,39 +190,50 @@ public class API_TestStepDefinitions {
     @Then("I should see the following response message:")
     public void i_should_see_the_following_response_message(io.cucumber.datatable.DataTable dataTable) {
 
-
+        assertTrue(response.body().asString().contains("\"error\": \"Missing password\""));
 
     }
 
     @Given("I wait for the user list to load")
     public void i_wait_for_the_user_list_to_load() {
+        response=given().accept(ContentType.JSON)
+                .and().queryParam("delay",3)
+                .when().get(TestDataReader.get("api_url")+"api/users");
+
+        assertEquals(response.statusCode(),200);
+        assertEquals(response.contentType(),"application/json; charset=utf-8");
 
     }
 
     @Then("I should see that every user has a unique id")
     public void i_should_see_that_every_user_has_a_unique_id() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        JsonPath json = response.jsonPath();
+        List<String> allIds = json.getList("data.id");
+        System.out.println(allIds);
+
+
     }
 
 
     @Given("I login unsuccessfully with the following data.")
     public void iLoginUnsuccessfullyWithTheFollowingData() {
 
-        Login login= new Login();
-        login.setEmail("eve.holt@reqres.in");
-       // login.setPassword("  ");
+        Login login1= new Login();
+        login1.setEmail("eve.holt@reqres.in");
+        login1.setPassword("");
        response= given().accept(ContentType.JSON)
                 .and().contentType(ContentType.JSON)
                 .queryParam("email","eve.holt@reqres.in")
-              //  .queryParam("password"," ")
-                .and().body(login)
+                .queryParam("password","")
+                .and().body(login1)
                 .when().post(TestDataReader.get("api_url")+"api/login");
+        System.out.println(response.statusCode());
 
     }
 
     @Then("I should get a response code of {int}.")
     public void iShouldGetAResponseCodeOf(int arg0) {
-        assertEquals(response.statusCode(),400);
+
+               assertEquals(response.statusCode(),400);
     }
 }

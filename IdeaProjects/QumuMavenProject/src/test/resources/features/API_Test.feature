@@ -1,4 +1,5 @@
 
+@API
 Feature: API test
 
 
@@ -36,7 +37,7 @@ Feature: API test
       | Email              | Password   |
       | eve.holt@reqres.in | cityslicka |
     Then I should get a response code of 200
-  @wip
+
   Scenario: LOGIN - UNSUCCESSFUL by a user
     Given I login unsuccessfully with the following data.
       | Email              | Password |
