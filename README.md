@@ -1,37 +1,62 @@
-QA Automation Assignment
-We have added two tests: the first task is API-Test.feature and the second is UI-Test.feature.
+Project Title: QumuQa Task
 
-For the API-Test.feature, please visit https://reqres.in/. This should contain all the requirements.
-UI-Test.feature please visit https://www.saucedemo.com/
-Please DO use Page objects, make sure the code is reusable and feel free to improve the current code.
+In GitHub you will find 2 projects:
 
-Note: We have intentionally added some bugs for you to debug.
+•	QumuQa Project: 
 
-Please contact the HR department if you have any questions.
+This is the original project which you have sent me. I have 
 
-Good luck!
+	Removed all the dependencies in the task and added new dependencies
+	Removed some paths and added some new paths in the structure
+	Used Page Object Model (POM) design pattern
+	Implemented my own Driver Class built based on singleton design pattern
+	Designed and implemented utility classes
+	Stored all configuration details in properties files named “TestData.properties”
+	Used TestDataReader class to read all details in properties files TestData.properties
+	Used Plugins to generate cucumber-report (RunnerTest / CukesRunner class) and to run only failed tests (RunnerTest / FailedTestRunner class)
 
-Test Automation Framework
-This is a Maven based framework
-pom.xml should have everything you need to create and run the tests. Please add further dependencies if you require it.
-The following folder src/test/java/AutomationTest/qumu contains the following class:
+•	QumuMaven Project:
 
-Hook - this is the before and after. This launches and kills the browser.
-RunnerTest - contains the CucumberOptions which runs the BDD's
-The following folder src/main/java/AutomationTest/qumu contains the following class:
+This is the project I have designed and implemented from scratch based on the requirements.
 
-BrowserSetup - This contains the setup of a given browser based on what is set to Browser property within TestData.properties
-Steps to execute this project
-Pre-requisites
 
-JAVA SDK 1.8 or higher
-Maven CLI
-Steps
+Tools:
 
-Clone the project to local
-Got o command line or any IDE that supports JAVA & Maven dependencies
-We may need to import the Maven dependencies (Scope got set to Compile for Newly added dependencies in pom.xm)
-Execute the command: mvn clean test
-Alternatively, we can run testng.xml from IDE after downloading the dependencies
-Result will be captured in test-output folder
+	IntelliJ IDEA 2019.3.4
+	Maven
+	Java 13
+	Page Object Model (POM)
+	Cucumber BDD
+	Gherkin
+	Junit
+	TestNG
+	RestAssured
+	Json
+	POJO
+	Selenium Webdriver
+	GitHub
+
+Reporting:
+
+Below you will see how to generate report:
+
+	Go to menu on the right side and find “Maven”
+	Double click “verify” below QumuA / Lifecycle
+
+You will see status as follows:
+
+ 
+
+	Right click on any of the html files starting with “overview” under “target / cucumber-html-reports” such as overview-features.html and select “Open in Browser” and use one of the browsers to see report
+
+ 
+
+
+
+
+ 
+
+
+ 
+
 
