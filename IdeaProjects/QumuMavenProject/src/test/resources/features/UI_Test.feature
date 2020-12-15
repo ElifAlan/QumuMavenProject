@@ -1,7 +1,7 @@
-@UI
+
 Feature: Checkout items in the basket
   Please use home page of https://www.saucedemo.com/
-
+  @UI
   Scenario: Check item total cost and tax
     Given I am on the home page
     And I login in with the following details
