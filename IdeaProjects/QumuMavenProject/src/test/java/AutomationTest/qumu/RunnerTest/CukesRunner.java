@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
         features = "src/test/resources/features/",
         glue = "AutomationTest/qumu/StepDefinitions/",
         dryRun = false,
-        tags = "@API"
+        tags = "@UI"
 )
 public class CukesRunner {
 }
